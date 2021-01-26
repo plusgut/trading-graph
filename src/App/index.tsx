@@ -93,41 +93,37 @@ export default component("App", () => {
                     <LinearGraph
                       width={GRAPH_WIDTH}
                       height={GRAPH_HEIGHT}
-                      values={accumulatedValues.map((purchase, index) => ({
-                        x: index,
-                        y: purchase.accBuyIn,
-                        tootlip: `${purchase.accBuyIn}`,
-                      }))}
+                      lines={[
+                        {
+                          color: "blue",
+                          values: accumulatedValues.map((purchase, index) => ({
+                            x: index,
+                            y: purchase.accBuyIn,
+                            tootlip: `${purchase.accBuyIn}`,
+                          })),
+                        },
+
+                        {
+                          color: "red",
+                          values: accumulatedValues.map((purchase, index) => ({
+                            x: index,
+                            y: purchase.accValue,
+                            tootlip: `${purchase.accValue}`,
+                          })),
+                        },
+                      ]}
                       maxYValue={Math.max(
-                        ...accumulatedValues.map(
-                          (purchase) => purchase.accBuyIn
-                        )
+                        ...accumulatedValues
+                          .map((purchase) => [
+                            purchase.accBuyIn,
+                            purchase.accValue,
+                          ])
+                          .flat()
                       )}
                       maxXValue={accumulatedValues.length - 1}
                       getYLabel={(y) => `${y}€`}
                       getXLabel={(x) =>
                         accumulatedValues[x].buyDate.toDateString()
-                      }
-                      yTargetRows={accumulatedValues.length - 1}
-                      xTargetColumns={10}
-                    />
-                    <LinearGraph
-                      width={GRAPH_WIDTH}
-                      height={GRAPH_HEIGHT}
-                      values={accumulatedValues.map((purchase, index) => ({
-                        x: index,
-                        y: purchase.accValue,
-                        tootlip: `${purchase.accValue}`,
-                      }))}
-                      maxYValue={Math.max(
-                        ...accumulatedValues.map(
-                          (purchase) => purchase.accValue
-                        )
-                      )}
-                      maxXValue={accumulatedValues.length - 1}
-                      getYLabel={(x) => `${x}€`}
-                      getXLabel={(y) =>
-                        accumulatedValues[y].buyDate.toDateString()
                       }
                       yTargetRows={accumulatedValues.length - 1}
                       xTargetColumns={10}

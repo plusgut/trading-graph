@@ -5,7 +5,10 @@ import Point, { MAX_CIRCLE_RADIUS } from "./components/Point";
 import styles from "./linearGraph.scss";
 
 type props = {
-  values: { x: number; y: number; tootlip: string }[];
+  lines: {
+    values: { x: number; y: number; tootlip: string }[];
+    color: string;
+  }[];
   width: number;
   height: number;
   maxYValue: number;
@@ -159,29 +162,31 @@ export default component(__dirname, (Props: Props<props>) => {
                 </>
               ))}
             </g>
-            <g>
-              <path
-                d={props.values
-                  .map(
-                    (value, index) =>
-                      `${index === 0 ? "M" : "L"} ${getXPosition(
-                        value.x
-                      )} ${getYPosition(value.y)}`
-                  )
-                  .join(" ")}
-                stroke="blue"
-                stroke-width={STROKE_WIDTH}
-                fill="none"
-              />
-              {props.values.map((value) => (
-                <Point
-                  x={getXPosition(value.x)}
-                  y={getYPosition(value.y)}
-                  tooltip={value.tootlip}
-                  color="blue"
+            {props.lines.map((line) => (
+              <g>
+                <path
+                  d={line.values
+                    .map(
+                      (value, index) =>
+                        `${index === 0 ? "M" : "L"} ${getXPosition(
+                          value.x
+                        )} ${getYPosition(value.y)}`
+                    )
+                    .join(" ")}
+                  stroke={line.color}
+                  stroke-width={STROKE_WIDTH}
+                  fill="none"
                 />
-              ))}
-            </g>
+                {line.values.map((value) => (
+                  <Point
+                    x={getXPosition(value.x)}
+                    y={getYPosition(value.y)}
+                    tooltip={value.tootlip}
+                    color={line.color}
+                  />
+                ))}
+              </g>
+            ))}
           </svg>
         );
       }}
