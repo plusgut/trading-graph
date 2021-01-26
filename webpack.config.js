@@ -3,7 +3,6 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { TsConfigPathsPlugin } = require("awesome-typescript-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 
 module.exports = (env, argv) => ({
   context: path.join(__dirname, "src"),
@@ -78,9 +77,7 @@ module.exports = (env, argv) => ({
     new HtmlWebpackPlugin({
       title: "Stock development",
       inject: "head",
-    }),
-    new ScriptExtHtmlWebpackPlugin({
-      defaultAttribute: "defer",
+      scriptLoading: "defer",
     }),
     new MiniCssExtractPlugin({
       filename: "css/[name].[hash].css",
