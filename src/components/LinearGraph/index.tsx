@@ -74,6 +74,8 @@ export default component(__dirname, (Props: Props<props>) => {
           ...yLabels.map((label) => getTextWidth(label, LABEL_FONT_SIZE))
         );
 
+        console.log(maxYLabelWidth);
+
         function getYPosition(y: number) {
           const shrinkSize = MAX_CIRCLE_RADIUS + X_AXIS_HEIGHT;
 

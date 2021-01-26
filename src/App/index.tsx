@@ -104,9 +104,9 @@ export default component("App", () => {
                         )
                       )}
                       maxXValue={accumulatedValues.length - 1}
-                      getYLabel={(x) => `${x}€`}
-                      getXLabel={(y) =>
-                        accumulatedValues[y].buyDate.toDateString()
+                      getYLabel={(y) => `${y}€`}
+                      getXLabel={(x) =>
+                        accumulatedValues[x].buyDate.toDateString()
                       }
                       yTargetRows={accumulatedValues.length - 1}
                       xTargetColumns={10}
