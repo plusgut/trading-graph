@@ -1,0 +1,25 @@
+.point {
+  .hoverCircle {
+    fill: var(--color_pallette_top_extraHighContrast);
+    stroke: var(--color_primary);
+    stroke-width: 1px;
+    transform-box: fill-box;
+    transform-origin: center center;
+    transform: scale(1);
+    transition: all 0.25s ease-out;
+  }
+  &:hover {
+    .hoverCircle {
+      transform: scale(2);
+    }
+  }
+}
+
+@keyframes hover {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(2);
+  }
+}
