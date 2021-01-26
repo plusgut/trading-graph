@@ -1,12 +1,12 @@
 import plusnew, { component, Props } from "@plusnew/core";
 import TooltipWrapper from "components/TooltipWrapper";
-import * as styleVariables from "scss/variables";
 import styles from "./point.scss";
 
 type props = {
   x: number;
   y: number;
   tooltip: string;
+  color: string;
 };
 
 const DEFAULT_CIRCLE_RADIUS = 4;
@@ -29,7 +29,7 @@ export default component(__dirname, (Props: Props<props>) => (
             cx={props.x}
             cy={props.y}
             r={DEFAULT_CIRCLE_RADIUS}
-            fill={styleVariables.color_primary}
+            fill={props.color}
           />
         </g>
       </TooltipWrapper>

@@ -176,6 +176,7 @@ export default component(__dirname, (Props: Props<props>) => {
                   x={getXPosition(value.x)}
                   y={getYPosition(value.y)}
                   tooltip={value.tootlip}
+                  color="blue"
                 />
               ))}
             </g>
