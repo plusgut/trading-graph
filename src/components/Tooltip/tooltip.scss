@@ -1,8 +1,6 @@
-@import "scss/zindex.scss";
-
 .tooltip {
   position: absolute;
-  z-index: zindex(tooltip);
+  z-index: 1;
   visibility: hidden;
 }
 
