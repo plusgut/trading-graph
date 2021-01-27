@@ -2,7 +2,6 @@ import plusnew, { component, Props } from "@plusnew/core";
 import { forEach } from "util/functional";
 import { getTextWidth } from "util/text";
 import Point, { MAX_CIRCLE_RADIUS } from "./components/Point";
-import styles from "./linearGraph.scss";
 
 type props = {
   lines: {
@@ -52,6 +51,8 @@ const STROKE_WIDTH = 2;
 const X_AXIS_HEIGHT = 20;
 const LABEL_FONT_SIZE = 0.5625;
 const AXIS_MARKER_SIZE = 3;
+const AXIS_COLOR = "grey";
+const AXIS_WIDTH = 1;
 
 export default component(__dirname, (Props: Props<props>) => {
   return (
@@ -76,8 +77,6 @@ export default component(__dirname, (Props: Props<props>) => {
         const maxYLabelWidth = Math.max(
           ...yLabels.map((label) => getTextWidth(label, LABEL_FONT_SIZE))
         );
-
-        console.log(maxYLabelWidth);
 
         function getYPosition(y: number) {
           const shrinkSize = MAX_CIRCLE_RADIUS + X_AXIS_HEIGHT;
@@ -112,14 +111,16 @@ export default component(__dirname, (Props: Props<props>) => {
                 y1={getYPosition(0)}
                 x2={getXPosition(xMaxStep + xStepSize / 2)}
                 y2={getYPosition(0)}
-                class={styles.lines}
+                stroke={AXIS_COLOR}
+                stroke-width={AXIS_WIDTH}
               />
               <line
                 x1={getXPosition(0)}
                 y1={getYPosition(0)}
                 x2={getXPosition(0)}
                 y2={getYPosition(yMaxStep + yStepSize / 2)}
-                class={styles.lines}
+                stroke={AXIS_COLOR}
+                stroke-width={AXIS_WIDTH}
               />
             </g>
             <g>
@@ -130,12 +131,15 @@ export default component(__dirname, (Props: Props<props>) => {
                     y1={getYPosition(0) - AXIS_MARKER_SIZE}
                     x2={getXPosition(xStepSize * index)}
                     y2={getYPosition(0) + AXIS_MARKER_SIZE}
-                    class={styles.lines}
+                    stroke={AXIS_COLOR}
+                    stroke-width={AXIS_WIDTH}
                   />
                   <text
                     x={getXPosition(xStepSize * index)}
                     y={props.height - X_AXIS_HEIGHT / 2}
-                    class={styles.xAxisLabel}
+                    text-anchor="middle"
+                    dominant-baseline="middle"
+                    font-size={`${LABEL_FONT_SIZE}rem`}
                   >
                     {props.getXLabel(xStepSize * index)}
                   </text>
@@ -150,12 +154,15 @@ export default component(__dirname, (Props: Props<props>) => {
                     y1={getYPosition(yStepSize * index)}
                     x2={getXPosition(0) + AXIS_MARKER_SIZE}
                     y2={getYPosition(yStepSize * index)}
-                    class={styles.lines}
+                    stroke={AXIS_COLOR}
+                    stroke-width={AXIS_WIDTH}
                   />
                   <text
                     x={maxYLabelWidth}
                     y={getYPosition(yStepSize * index)}
-                    class={styles.yAxisLabel}
+                    font-size={`${LABEL_FONT_SIZE}rem`}
+                    text-anchor="end"
+                    dominant-baseline="middle"
                   >
                     {label}
                   </text>

@@ -24,6 +24,8 @@ export default component(__dirname, (Props: Props<props>) => (
             cy={props.y}
             r={DEFAULT_CIRCLE_RADIUS - HOVER_CIRCLE_STROKE}
             class={styles.hoverCircle}
+            fill="white"
+            stroke={props.color}
           />
           <circle
             cx={props.x}
