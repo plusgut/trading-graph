@@ -1,5 +1,6 @@
 import plusnew, { component, PortalExit, store, Try } from "@plusnew/core";
 import LinearGraph from "components/LinearGraph";
+import Size from "components/Size";
 import TextArea from "components/TextArea";
 import localStoreFactory from "util/localStoreFactory";
 
@@ -66,8 +67,6 @@ function getWkns(purchases: { wkn: string }[]) {
     .map((purchase) => purchase.wkn);
 }
 
-const GRAPH_WIDTH = 1200;
-const GRAPH_HEIGHT = 300;
 const GRAPH_Y_TARGET_ROWS = 10;
 const TEXTAREA_ROWS = 20;
 const TEXTAREA_COLUMNS = 200;
@@ -114,55 +113,63 @@ export default component("App", () => {
                 );
 
                 return (
-                  <div>
-                    {accumulatedValuesList.map((accumulatedValues, index) => (
-                      <>
-                        <div>{wkns[index]}:</div>
-                        <LinearGraph
-                          width={GRAPH_WIDTH}
-                          height={GRAPH_HEIGHT}
-                          lines={[
-                            {
-                              color: "blue",
-                              values: accumulatedValues.map(
-                                (purchase, index) => ({
-                                  x: index,
-                                  y: purchase.accBuyIn,
-                                  tootlip: `${purchase.accBuyIn}`,
-                                })
-                              ),
-                            },
+                  <Size>
+                    {({ width }) => {
+                      const windowHeight = window.innerHeight;
 
-                            {
-                              color: "red",
-                              values: accumulatedValues.map(
-                                (purchase, index) => ({
-                                  x: index,
-                                  y: purchase.accValue,
-                                  tootlip: `${purchase.accValue}`,
-                                })
-                              ),
-                            },
-                          ]}
-                          maxYValue={Math.max(
-                            ...accumulatedValues
-                              .map((purchase) => [
-                                purchase.accBuyIn,
-                                purchase.accValue,
-                              ])
-                              .flat()
-                          )}
-                          maxXValue={accumulatedValues.length - 1}
-                          getYLabel={(y) => `${y}€`}
-                          getXLabel={(x) =>
-                            accumulatedValues[x].buyDate.toDateString()
-                          }
-                          yTargetRows={GRAPH_Y_TARGET_ROWS}
-                          xTargetColumns={accumulatedValues.length}
-                        />
-                      </>
-                    ))}
-                  </div>
+                      return accumulatedValuesList.map(
+                        (accumulatedValues, index) => (
+                          <>
+                            <div>{wkns[index]}:</div>
+                            <LinearGraph
+                              width={width}
+                              height={
+                                windowHeight / accumulatedValuesList.length
+                              }
+                              lines={[
+                                {
+                                  color: "blue",
+                                  values: accumulatedValues.map(
+                                    (purchase, index) => ({
+                                      x: index,
+                                      y: purchase.accBuyIn,
+                                      tootlip: `${purchase.accBuyIn}`,
+                                    })
+                                  ),
+                                },
+
+                                {
+                                  color: "red",
+                                  values: accumulatedValues.map(
+                                    (purchase, index) => ({
+                                      x: index,
+                                      y: purchase.accValue,
+                                      tootlip: `${purchase.accValue}`,
+                                    })
+                                  ),
+                                },
+                              ]}
+                              maxYValue={Math.max(
+                                ...accumulatedValues
+                                  .map((purchase) => [
+                                    purchase.accBuyIn,
+                                    purchase.accValue,
+                                  ])
+                                  .flat()
+                              )}
+                              maxXValue={accumulatedValues.length - 1}
+                              getYLabel={(y) => `${y}€`}
+                              getXLabel={(x) =>
+                                accumulatedValues[x].buyDate.toDateString()
+                              }
+                              yTargetRows={GRAPH_Y_TARGET_ROWS}
+                              xTargetColumns={accumulatedValues.length}
+                            />
+                          </>
+                        )
+                      );
+                    }}
+                  </Size>
                 );
               }}
             </Try>
