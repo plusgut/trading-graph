@@ -57,6 +57,9 @@ function getAccumulatedValues(
 
 const GRAPH_WIDTH = 1200;
 const GRAPH_HEIGHT = 300;
+const GRAPH_Y_TARGET_ROWS = 10;
+const TEXTAREA_ROWS = 20;
+const TEXTAREA_COLUMNS = 200;
 
 export default component("App", () => {
   const purchases = localStoreFactory("stocks", "", (value) => store(value));
@@ -70,8 +73,8 @@ export default component("App", () => {
         {(purchasesState) => (
           <>
             <TextArea
-              rows={20}
-              columns={200}
+              rows={TEXTAREA_ROWS}
+              columns={TEXTAREA_COLUMNS}
               value={purchasesState}
               onchange={purchases.dispatch}
             />
@@ -80,7 +83,13 @@ export default component("App", () => {
               catch={() => (
                 <>
                   <p>No Valid data, please format each row like this:</p>
-                  <p>2021-01-26|A2DVB9|7.67|500</p>
+                  <p>
+                    2021-01-26|A2DVB9|7.67|500
+                    <br />
+                    2021-01-27|A2DVB9|8|500
+                    <br />
+                    2021-01-28|A2DVB9|8.2|500
+                  </p>
                 </>
               )}
             >
@@ -125,8 +134,8 @@ export default component("App", () => {
                       getXLabel={(x) =>
                         accumulatedValues[x].buyDate.toDateString()
                       }
-                      yTargetRows={accumulatedValues.length - 1}
-                      xTargetColumns={10}
+                      yTargetRows={GRAPH_Y_TARGET_ROWS}
+                      xTargetColumns={accumulatedValues.length}
                     />
                   </div>
                 );
