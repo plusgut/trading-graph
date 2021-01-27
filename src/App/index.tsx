@@ -106,7 +106,8 @@ export default component("App", () => {
             >
               {() => {
                 const purchases = getParsedPurchases(purchasesState);
-                const accumulatedValuesList = getWkns(purchases).map((wkn) =>
+                const wkns = getWkns(purchases);
+                const accumulatedValuesList = wkns.map((wkn) =>
                   getAccumulatedValues(
                     purchases.filter((purchase) => purchase.wkn === wkn)
                   )
@@ -114,49 +115,52 @@ export default component("App", () => {
 
                 return (
                   <div>
-                    {accumulatedValuesList.map((accumulatedValues) => (
-                      <LinearGraph
-                        width={GRAPH_WIDTH}
-                        height={GRAPH_HEIGHT}
-                        lines={[
-                          {
-                            color: "blue",
-                            values: accumulatedValues.map(
-                              (purchase, index) => ({
-                                x: index,
-                                y: purchase.accBuyIn,
-                                tootlip: `${purchase.accBuyIn}`,
-                              })
-                            ),
-                          },
+                    {accumulatedValuesList.map((accumulatedValues, index) => (
+                      <>
+                        <div>{wkns[index]}:</div>
+                        <LinearGraph
+                          width={GRAPH_WIDTH}
+                          height={GRAPH_HEIGHT}
+                          lines={[
+                            {
+                              color: "blue",
+                              values: accumulatedValues.map(
+                                (purchase, index) => ({
+                                  x: index,
+                                  y: purchase.accBuyIn,
+                                  tootlip: `${purchase.accBuyIn}`,
+                                })
+                              ),
+                            },
 
-                          {
-                            color: "red",
-                            values: accumulatedValues.map(
-                              (purchase, index) => ({
-                                x: index,
-                                y: purchase.accValue,
-                                tootlip: `${purchase.accValue}`,
-                              })
-                            ),
-                          },
-                        ]}
-                        maxYValue={Math.max(
-                          ...accumulatedValues
-                            .map((purchase) => [
-                              purchase.accBuyIn,
-                              purchase.accValue,
-                            ])
-                            .flat()
-                        )}
-                        maxXValue={accumulatedValues.length - 1}
-                        getYLabel={(y) => `${y}€`}
-                        getXLabel={(x) =>
-                          accumulatedValues[x].buyDate.toDateString()
-                        }
-                        yTargetRows={GRAPH_Y_TARGET_ROWS}
-                        xTargetColumns={accumulatedValues.length}
-                      />
+                            {
+                              color: "red",
+                              values: accumulatedValues.map(
+                                (purchase, index) => ({
+                                  x: index,
+                                  y: purchase.accValue,
+                                  tootlip: `${purchase.accValue}`,
+                                })
+                              ),
+                            },
+                          ]}
+                          maxYValue={Math.max(
+                            ...accumulatedValues
+                              .map((purchase) => [
+                                purchase.accBuyIn,
+                                purchase.accValue,
+                              ])
+                              .flat()
+                          )}
+                          maxXValue={accumulatedValues.length - 1}
+                          getYLabel={(y) => `${y}€`}
+                          getXLabel={(x) =>
+                            accumulatedValues[x].buyDate.toDateString()
+                          }
+                          yTargetRows={GRAPH_Y_TARGET_ROWS}
+                          xTargetColumns={accumulatedValues.length}
+                        />
+                      </>
                     ))}
                   </div>
                 );
