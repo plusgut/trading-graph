@@ -22,7 +22,7 @@ module.exports = (env, argv) => ({
   module: {
     rules: [
       {
-        test: /\.s?css$/,
+        test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
           {
@@ -32,12 +32,6 @@ module.exports = (env, argv) => ({
               modules: {
                 localIdentName: "[name]__[hash:base64:5]",
               },
-            },
-          },
-          {
-            loader: "sass-loader",
-            options: {
-              sourceMap: true,
             },
           },
         ],

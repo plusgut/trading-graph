@@ -5,7 +5,7 @@ import plusnew, {
   store,
 } from "@plusnew/core";
 import Tooltip from "components/Tooltip";
-import styles from "./tooltipWrapper.scss";
+import styles from "./tooltipWrapper.css";
 
 type props = {
   content: ApplicationElement;

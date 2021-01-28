@@ -1,6 +1,6 @@
 import plusnew, { component, Props } from "@plusnew/core";
 import TooltipWrapper from "components/TooltipWrapper";
-import styles from "./point.scss";
+import styles from "./point.css";
 
 type props = {
   x: number;

@@ -1,6 +1,6 @@
 import plusnew, { component, PortalEntrance, Props } from "@plusnew/core";
 import { ElementLifecycle } from "@plusnew/driver-dom";
-import styles from "./tooltip.scss";
+import styles from "./tooltip.css";
 type props = {
   width: number;
   height: number;
