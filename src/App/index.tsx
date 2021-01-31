@@ -1,11 +1,9 @@
-import plusnew, { component, PortalExit, store, Try } from "@plusnew/core";
+import plusnew, { Async, component, PortalExit, Try } from "@plusnew/core";
 import LinearGraph from "components/LinearGraph";
 import Size from "components/Size";
-import TextArea from "components/TextArea";
-import localStoreFactory from "util/localStoreFactory";
 
 const PURCHASE_PIECES = 4;
-
+const DELIMITER = ",";
 type purchase = {
   buyDate: Date;
   wkn: string;
@@ -22,7 +20,7 @@ type accumulatedPurchase = {
 };
 function getParsedPurchases(value: string): purchase[] {
   return value.split("\n").map((line) => {
-    const result = line.split("|");
+    const result = line.split(DELIMITER);
     if (result.length === PURCHASE_PIECES) {
       const [buyDate, wkn, buyInIndividualPrice, buyInTotal] = result;
       return {
@@ -156,28 +154,34 @@ function getTimeDiff(a: Date, b: Date) {
 }
 const GRAPH_Y_TARGET_ROWS = 10;
 const GRAPH_X_TARGET_ROWS = 20;
-const TEXTAREA_ROWS = 20;
-const TEXTAREA_COLUMNS = 200;
 
 export default component("App", () => {
-  const purchases = localStoreFactory("stocks", "", (value) => store(value));
-
   return (
     <>
       <div style={{ position: "absolute" }}>
         <PortalExit name="drawboard" />
       </div>
-      <purchases.Observer>
-        {(purchasesState) => (
-          <>
-            <TextArea
-              rows={TEXTAREA_ROWS}
-              columns={TEXTAREA_COLUMNS}
-              value={purchasesState}
-              onchange={purchases.dispatch}
-            />
+      {window.location.hash ? (
+        <Async
+          constructor={async () => {
+            const [result] = Object.values(
+              (
+                await (
+                  await fetch(
+                    `https://api.github.com/gists/${window.location.hash.slice(
+                      1
+                    )}`
+                  )
+                ).json()
+              ).files
+            );
+
+            return (result as { content: string }).content;
+          }}
+          pendingIndicator={"Loading.."}
+        >
+          {(response) => (
             <Try
-              key={purchasesState}
               catch={() => (
                 <>
                   <p>No Valid data, please format each row like this:</p>
@@ -192,7 +196,7 @@ export default component("App", () => {
               )}
             >
               {() => {
-                const purchases = getParsedPurchases(purchasesState);
+                const purchases = getParsedPurchases(response);
                 const wkns = getWkns(purchases);
                 const accumulatedValuesList = wkns.map((wkn) =>
                   getAccumulatedValues(
@@ -324,9 +328,11 @@ export default component("App", () => {
                 );
               }}
             </Try>
-          </>
-        )}
-      </purchases.Observer>
+          )}
+        </Async>
+      ) : (
+        "Please put in an url with your gists id as a hash"
+      )}
     </>
   );
 });
