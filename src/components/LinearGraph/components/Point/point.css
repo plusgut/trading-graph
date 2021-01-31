@@ -1,16 +1,13 @@
-.point {
-  .hoverCircle {
-    stroke-width: 1px;
-    transform-box: fill-box;
-    transform-origin: center center;
-    transform: scale(1);
-    transition: all 0.25s ease-out;
-  }
-  &:hover {
-    .hoverCircle {
-      transform: scale(2);
-    }
-  }
+.point:hover .hoverCircle {
+  transform: scale(2);
+}
+
+.hoverCircle {
+  stroke-width: 1px;
+  transform-box: fill-box;
+  transform-origin: center center;
+  transform: scale(1);
+  transition: all 0.25s ease-out;
 }
 
 @keyframes hover {

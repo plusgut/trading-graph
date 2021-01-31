@@ -155,6 +155,7 @@ function getTimeDiff(a: Date, b: Date) {
   return a.getTime() - b.getTime();
 }
 const GRAPH_Y_TARGET_ROWS = 10;
+const GRAPH_X_TARGET_ROWS = 20;
 const TEXTAREA_ROWS = 20;
 const TEXTAREA_COLUMNS = 200;
 
@@ -203,13 +204,17 @@ export default component("App", () => {
                   accumulatedValuesList
                 );
 
-                const maxXValue = summedAccumulatedValues.length - 1;
-
                 const maxYValue = Math.max(
                   ...summedAccumulatedValues
                     .map((purchase) => [purchase.accBuyIn, purchase.accValue])
                     .flat()
                 );
+                const minDate = summedAccumulatedValues[0].buyDate;
+                const maxDate =
+                  summedAccumulatedValues[summedAccumulatedValues.length - 1]
+                    .buyDate;
+
+                const dateDiff = getTimeDiff(maxDate, minDate);
 
                 return (
                   <Size>
@@ -228,8 +233,8 @@ export default component("App", () => {
                               {
                                 color: "blue",
                                 values: summedAccumulatedValues.map(
-                                  (purchase, index) => ({
-                                    x: index,
+                                  (purchase) => ({
+                                    x: getTimeDiff(purchase.buyDate, minDate),
                                     y: purchase.accBuyIn,
                                     tootlip: `${purchase.accBuyIn}`,
                                   })
@@ -239,22 +244,22 @@ export default component("App", () => {
                               {
                                 color: "red",
                                 values: summedAccumulatedValues.map(
-                                  (purchase, index) => ({
-                                    x: index,
+                                  (purchase) => ({
+                                    x: getTimeDiff(purchase.buyDate, minDate),
                                     y: purchase.accValue,
                                     tootlip: `${purchase.accValue}`,
                                   })
                                 ),
                               },
                             ]}
-                            maxXValue={maxXValue}
+                            maxXValue={dateDiff}
                             maxYValue={maxYValue}
                             getYLabel={(y) => `${y}€`}
                             getXLabel={(x) =>
-                              summedAccumulatedValues[x].buyDate.toDateString()
+                              new Date(minDate.getTime() + x).toDateString()
                             }
                             yTargetRows={GRAPH_Y_TARGET_ROWS}
-                            xTargetColumns={summedAccumulatedValues.length}
+                            xTargetColumns={GRAPH_X_TARGET_ROWS}
                           />
 
                           {accumulatedValuesList.map(
@@ -271,8 +276,12 @@ export default component("App", () => {
                                     {
                                       color: "blue",
                                       values: accumulatedValues.map(
-                                        (purchase, index) => ({
-                                          x: index,
+                                        (purchase) => ({
+                                          x: getTimeDiff(
+                                            purchase.buyDate,
+                                            minDate
+                                          ),
+
                                           y: purchase.accBuyIn,
                                           tootlip: `${purchase.accBuyIn}`,
                                         })
@@ -282,8 +291,12 @@ export default component("App", () => {
                                     {
                                       color: "red",
                                       values: accumulatedValues.map(
-                                        (purchase, index) => ({
-                                          x: index,
+                                        (purchase) => ({
+                                          x: getTimeDiff(
+                                            purchase.buyDate,
+                                            minDate
+                                          ),
+
                                           y: purchase.accValue,
                                           tootlip: `${purchase.accValue}`,
                                         })
@@ -291,13 +304,15 @@ export default component("App", () => {
                                     },
                                   ]}
                                   maxYValue={maxYValue}
-                                  maxXValue={accumulatedValues.length - 1}
+                                  maxXValue={dateDiff}
                                   getYLabel={(y) => `${y}€`}
                                   getXLabel={(x) =>
-                                    accumulatedValues[x].buyDate.toDateString()
+                                    new Date(
+                                      minDate.getTime() + x
+                                    ).toDateString()
                                   }
                                   yTargetRows={GRAPH_Y_TARGET_ROWS}
-                                  xTargetColumns={accumulatedValues.length}
+                                  xTargetColumns={GRAPH_X_TARGET_ROWS}
                                 />
                               </>
                             )
