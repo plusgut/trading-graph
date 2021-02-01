@@ -5,6 +5,7 @@ import plusnew, {
   store,
   Try,
 } from "@plusnew/core";
+import i18n from "components/i18n";
 import LinearGraph from "components/LinearGraph";
 import Size from "components/Size";
 
@@ -178,201 +179,220 @@ export default component("App", () => {
       <div style={{ position: "absolute" }}>
         <PortalExit name="drawboard" />
       </div>
-      <hash.Observer>
-        {(hashState) =>
-          hashState === null ? (
-            "Please put in an url with your gists id as a hash"
-          ) : (
-            <Try key={hashState} catch={() => "Could not load gist"}>
-              {() => (
-                <Async
-                  constructor={async () => {
-                    const [result] = Object.values(
-                      (
-                        await (
-                          await fetch(
-                            `https://api.github.com/gists/${window.location.hash.slice(
-                              1
-                            )}`
-                          )
-                        ).json()
-                      ).files
-                    );
-
-                    return (result as { content: string }).content;
-                  }}
-                  pendingIndicator={"Loading..."}
-                >
-                  {(response) => (
-                    <Try
-                      catch={() => (
-                        <>
-                          <p>
-                            No Valid data, please format each row like this:
-                          </p>
-                          <p>
-                            2021-01-26,A2DVB9,7.67,500
-                            <br />
-                            2021-01-27,A2DVB9,8,500
-                            <br />
-                            2021-01-28,A2DVB9,8.2,500
-                          </p>
-                        </>
-                      )}
-                    >
-                      {() => {
-                        const purchases = getParsedPurchases(response);
-                        const wkns = getWkns(purchases);
-                        const accumulatedValuesList = wkns.map((wkn) =>
-                          getAccumulatedValues(
-                            purchases.filter((purchase) => purchase.wkn === wkn)
-                          )
+      <i18n.Consumer>
+        {({ base }) => (
+          <hash.Observer>
+            {(hashState) =>
+              hashState === null ? (
+                base()?.noGist
+              ) : (
+                <Try key={hashState} catch={() => base()?.gistError}>
+                  {() => (
+                    <Async
+                      constructor={async () => {
+                        const [result] = Object.values(
+                          (
+                            await (
+                              await fetch(
+                                `https://api.github.com/gists/${window.location.hash.slice(
+                                  1
+                                )}`
+                              )
+                            ).json()
+                          ).files
                         );
 
-                        const summedAccumulatedValues = getSummedAccumulatedValues(
-                          accumulatedValuesList
-                        );
-
-                        const maxYValue = Math.max(
-                          ...summedAccumulatedValues
-                            .map((purchase) => [
-                              purchase.accBuyIn,
-                              purchase.accValue,
-                            ])
-                            .flat()
-                        );
-                        const minDate = summedAccumulatedValues[0].buyDate;
-                        const maxDate =
-                          summedAccumulatedValues[
-                            summedAccumulatedValues.length - 1
-                          ].buyDate;
-
-                        const dateDiff = getTimeDiff(maxDate, minDate);
-
-                        return (
-                          <Size>
-                            {({ width }) => {
-                              const windowHeight = window.innerHeight;
-
-                              return (
-                                <>
-                                  <div>sum:</div>
-                                  <LinearGraph
-                                    width={width}
-                                    height={
-                                      windowHeight /
-                                      (accumulatedValuesList.length + 1)
-                                    }
-                                    lines={[
-                                      {
-                                        color: "blue",
-                                        values: summedAccumulatedValues.map(
-                                          (purchase) => ({
-                                            x: getTimeDiff(
-                                              purchase.buyDate,
-                                              minDate
-                                            ),
-                                            y: purchase.accBuyIn,
-                                            tootlip: `${purchase.accBuyIn}`,
-                                          })
-                                        ),
-                                      },
-
-                                      {
-                                        color: "red",
-                                        values: summedAccumulatedValues.map(
-                                          (purchase) => ({
-                                            x: getTimeDiff(
-                                              purchase.buyDate,
-                                              minDate
-                                            ),
-                                            y: purchase.accValue,
-                                            tootlip: `${purchase.accValue}`,
-                                          })
-                                        ),
-                                      },
-                                    ]}
-                                    maxXValue={dateDiff}
-                                    maxYValue={maxYValue}
-                                    getYLabel={(y) => `${y}€`}
-                                    getXLabel={(x) =>
-                                      new Date(
-                                        minDate.getTime() + x
-                                      ).toDateString()
-                                    }
-                                    yTargetRows={GRAPH_Y_TARGET_ROWS}
-                                    xColumns={GRAPH_X_TARGET_ROWS}
-                                  />
-
-                                  {accumulatedValuesList.map(
-                                    (accumulatedValues, index) => (
-                                      <>
-                                        <div>{wkns[index]}:</div>
-                                        <LinearGraph
-                                          width={width}
-                                          height={
-                                            windowHeight /
-                                            (accumulatedValuesList.length + 1)
-                                          }
-                                          lines={[
-                                            {
-                                              color: "blue",
-                                              values: accumulatedValues.map(
-                                                (purchase) => ({
-                                                  x: getTimeDiff(
-                                                    purchase.buyDate,
-                                                    minDate
-                                                  ),
-
-                                                  y: purchase.accBuyIn,
-                                                  tootlip: `${purchase.accBuyIn}`,
-                                                })
-                                              ),
-                                            },
-
-                                            {
-                                              color: "red",
-                                              values: accumulatedValues.map(
-                                                (purchase) => ({
-                                                  x: getTimeDiff(
-                                                    purchase.buyDate,
-                                                    minDate
-                                                  ),
-
-                                                  y: purchase.accValue,
-                                                  tootlip: `${purchase.accValue}`,
-                                                })
-                                              ),
-                                            },
-                                          ]}
-                                          maxYValue={maxYValue}
-                                          maxXValue={dateDiff}
-                                          getYLabel={(y) => `${y}€`}
-                                          getXLabel={(x) =>
-                                            new Date(
-                                              minDate.getTime() + x
-                                            ).toDateString()
-                                          }
-                                          yTargetRows={GRAPH_Y_TARGET_ROWS}
-                                          xColumns={GRAPH_X_TARGET_ROWS}
-                                        />
-                                      </>
-                                    )
-                                  )}
-                                </>
-                              );
-                            }}
-                          </Size>
-                        );
+                        return (result as { content: string }).content;
                       }}
-                    </Try>
+                      pendingIndicator={base()?.loading ?? ""}
+                    >
+                      {(response) => (
+                        <Try
+                          catch={() => (
+                            <>
+                              <p>{base()?.invalidData}:</p>
+                              <p>
+                                2021-01-26,A2DVB9,7.67,500
+                                <br />
+                                2021-01-27,A2DVB9,8,500
+                                <br />
+                                2021-01-28,A2DVB9,8.2,500
+                              </p>
+                            </>
+                          )}
+                        >
+                          {() => {
+                            const purchases = getParsedPurchases(response);
+                            const wkns = getWkns(purchases);
+                            const accumulatedValuesList = wkns.map((wkn) =>
+                              getAccumulatedValues(
+                                purchases.filter(
+                                  (purchase) => purchase.wkn === wkn
+                                )
+                              )
+                            );
+
+                            const summedAccumulatedValues = getSummedAccumulatedValues(
+                              accumulatedValuesList
+                            );
+
+                            const maxYValue = Math.max(
+                              ...summedAccumulatedValues
+                                .map((purchase) => [
+                                  purchase.accBuyIn,
+                                  purchase.accValue,
+                                ])
+                                .flat()
+                            );
+                            const minDate = summedAccumulatedValues[0].buyDate;
+                            const maxDate =
+                              summedAccumulatedValues[
+                                summedAccumulatedValues.length - 1
+                              ].buyDate;
+
+                            const dateDiff = getTimeDiff(maxDate, minDate);
+
+                            return (
+                              <Size>
+                                {({ width }) => {
+                                  const windowHeight = window.innerHeight;
+
+                                  return (
+                                    <>
+                                      <div>sum:</div>
+                                      <LinearGraph
+                                        width={width}
+                                        height={
+                                          windowHeight /
+                                          (accumulatedValuesList.length + 1)
+                                        }
+                                        lines={[
+                                          {
+                                            color: "blue",
+                                            values: summedAccumulatedValues.map(
+                                              (purchase) => ({
+                                                x: getTimeDiff(
+                                                  purchase.buyDate,
+                                                  minDate
+                                                ),
+                                                y: purchase.accBuyIn,
+                                                tootlip: `${base()?.number(
+                                                  purchase.accBuyIn
+                                                )}`,
+                                              })
+                                            ),
+                                          },
+
+                                          {
+                                            color: "red",
+                                            values: summedAccumulatedValues.map(
+                                              (purchase) => ({
+                                                x: getTimeDiff(
+                                                  purchase.buyDate,
+                                                  minDate
+                                                ),
+                                                y: purchase.accValue,
+                                                tootlip: `${base()?.number(
+                                                  purchase.accValue
+                                                )}`,
+                                              })
+                                            ),
+                                          },
+                                        ]}
+                                        maxXValue={dateDiff}
+                                        maxYValue={maxYValue}
+                                        getYLabel={(y) =>
+                                          `${base()?.number(y)}€`
+                                        }
+                                        getXLabel={(x) =>
+                                          base()?.date(
+                                            new Date(minDate.getTime() + x)
+                                          ) ?? ""
+                                        }
+                                        yTargetRows={GRAPH_Y_TARGET_ROWS}
+                                        xColumns={GRAPH_X_TARGET_ROWS}
+                                      />
+
+                                      {accumulatedValuesList.map(
+                                        (accumulatedValues, index) => (
+                                          <>
+                                            <div>{wkns[index]}:</div>
+                                            <LinearGraph
+                                              width={width}
+                                              height={
+                                                windowHeight /
+                                                (accumulatedValuesList.length +
+                                                  1)
+                                              }
+                                              lines={[
+                                                {
+                                                  color: "blue",
+                                                  values: accumulatedValues.map(
+                                                    (purchase) => ({
+                                                      x: getTimeDiff(
+                                                        purchase.buyDate,
+                                                        minDate
+                                                      ),
+
+                                                      y: purchase.accBuyIn,
+                                                      tootlip: `${base()?.number(
+                                                        purchase.accBuyIn
+                                                      )}`,
+                                                    })
+                                                  ),
+                                                },
+
+                                                {
+                                                  color: "red",
+                                                  values: accumulatedValues.map(
+                                                    (purchase) => ({
+                                                      x: getTimeDiff(
+                                                        purchase.buyDate,
+                                                        minDate
+                                                      ),
+
+                                                      y: purchase.accValue,
+                                                      tootlip: `${base()?.number(
+                                                        purchase.accValue
+                                                      )}`,
+                                                    })
+                                                  ),
+                                                },
+                                              ]}
+                                              maxYValue={maxYValue}
+                                              maxXValue={dateDiff}
+                                              getYLabel={(y) =>
+                                                `${base()?.number(y)}€`
+                                              }
+                                              getXLabel={(x) =>
+                                                base()?.date(
+                                                  new Date(
+                                                    minDate.getTime() + x
+                                                  )
+                                                ) ?? ""
+                                              }
+                                              yTargetRows={GRAPH_Y_TARGET_ROWS}
+                                              xColumns={GRAPH_X_TARGET_ROWS}
+                                            />
+                                          </>
+                                        )
+                                      )}
+                                    </>
+                                  );
+                                }}
+                              </Size>
+                            );
+                          }}
+                        </Try>
+                      )}
+                    </Async>
                   )}
-                </Async>
-              )}
-            </Try>
-          )
-        }
-      </hash.Observer>
+                </Try>
+              )
+            }
+          </hash.Observer>
+        )}
+      </i18n.Consumer>
     </>
   );
 });

@@ -522,6 +522,11 @@
   resolved "https://registry.yarnpkg.com/@plusnew/enzyme-adapter/-/enzyme-adapter-1.1.0.tgz#f7af67762b18a878f9e7b4ae859159ca92e0148a"
   integrity sha512-bEv8woIzYW2kWTFIpDSwFPS07CXRGwh68O+facZY4jU+5TmucL6Jrs/hcVBbuAGq3E0BZ6PvB5N4NlHiiWd2uA==
 
+"@plusnew/i18n@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@plusnew/i18n/-/i18n-0.2.1.tgz#298a4e2a1adc3673acd8824f091cf78074f35423"
+  integrity sha512-Ci0+IG0WHk6HbEukvVb9CdnayYf5WLG+u8G/qERY1MrBfzKKqe7CDFod9E66aP+/B9EzNKvFU4p+3L9VJNTUXg==
+
 "@plusnew/simulate-dom-events@^0.1.5":
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/@plusnew/simulate-dom-events/-/simulate-dom-events-0.1.5.tgz#8899a4eb37cd40cf82e8d413fff9097d9c3bf186"
