@@ -194,9 +194,7 @@ export default component("App", () => {
                           (
                             await (
                               await fetch(
-                                `https://api.github.com/gists/${window.location.hash.slice(
-                                  1
-                                )}`
+                                `https://api.github.com/gists/${hashState}`
                               )
                             ).json()
                           ).files
