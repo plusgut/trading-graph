@@ -301,7 +301,7 @@ export default component("App", () => {
                                       ).toDateString()
                                     }
                                     yTargetRows={GRAPH_Y_TARGET_ROWS}
-                                    xTargetColumns={GRAPH_X_TARGET_ROWS}
+                                    xColumns={GRAPH_X_TARGET_ROWS}
                                   />
 
                                   {accumulatedValuesList.map(
@@ -354,7 +354,7 @@ export default component("App", () => {
                                             ).toDateString()
                                           }
                                           yTargetRows={GRAPH_Y_TARGET_ROWS}
-                                          xTargetColumns={GRAPH_X_TARGET_ROWS}
+                                          xColumns={GRAPH_X_TARGET_ROWS}
                                         />
                                       </>
                                     )

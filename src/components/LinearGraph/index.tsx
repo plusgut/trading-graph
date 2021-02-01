@@ -15,7 +15,7 @@ type props = {
   getXLabel: (x: number) => string;
   getYLabel: (y: number) => string;
   yTargetRows: number;
-  xTargetColumns: number;
+  xColumns: number;
 };
 
 function getStepSize(range: number, targetStepAmount: number) {
@@ -65,10 +65,7 @@ export default component(__dirname, (Props: Props<props>) => {
         const yStepSize = getStepSize(props.maxYValue, props.yTargetRows - 1);
         const yStepAmount = getStepAmount(props.maxYValue, yStepSize);
         const yMaxStep = yStepAmount * yStepSize;
-        const xStepSize = getStepSize(
-          props.maxXValue,
-          props.xTargetColumns - 1
-        );
+        const xStepSize = props.maxXValue / (props.xColumns - 1);
         const xStepAmount = getStepAmount(props.maxXValue, xStepSize);
         const xMaxStep = xStepAmount * xStepSize;
         const yLabels = forEach(yStepAmount + 1, (index) =>
