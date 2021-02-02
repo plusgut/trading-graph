@@ -8,6 +8,7 @@ import plusnew, {
 import i18n from "components/i18n";
 import LinearGraph from "components/LinearGraph";
 import Size from "components/Size";
+import style from "./app.css";
 
 const PURCHASE_PIECES = 4;
 const DELIMITER = ",";
@@ -168,6 +169,7 @@ function getLocationHash() {
 
 const GRAPH_Y_TARGET_ROWS = 10;
 const GRAPH_X_TARGET_ROWS = 20;
+const HEADLINE_HEIGHT = 18;
 
 export default component("App", () => {
   const hash = store(getLocationHash());
@@ -176,7 +178,7 @@ export default component("App", () => {
 
   return (
     <>
-      <div style={{ position: "absolute" }}>
+      <div class={style.drawboard}>
         <PortalExit name="drawboard" />
       </div>
       <i18n.Consumer>
@@ -254,16 +256,17 @@ export default component("App", () => {
                               <Size>
                                 {({ width }) => {
                                   const windowHeight = window.innerHeight;
-
+                                  const graphCount =
+                                    accumulatedValuesList.length + 1;
+                                  const graphHeight =
+                                    windowHeight / graphCount -
+                                    graphCount * HEADLINE_HEIGHT;
                                   return (
                                     <>
                                       <div>sum:</div>
                                       <LinearGraph
                                         width={width}
-                                        height={
-                                          windowHeight /
-                                          (accumulatedValuesList.length + 1)
-                                        }
+                                        height={graphHeight}
                                         lines={[
                                           {
                                             color: "blue",
@@ -317,11 +320,7 @@ export default component("App", () => {
                                             <div>{wkns[index]}:</div>
                                             <LinearGraph
                                               width={width}
-                                              height={
-                                                windowHeight /
-                                                (accumulatedValuesList.length +
-                                                  1)
-                                              }
+                                              height={graphHeight}
                                               lines={[
                                                 {
                                                   color: "blue",

@@ -168,21 +168,19 @@ export default component(__dirname, (Props: Props<props>) => (
         return (
           <ElementLifecycle
             elementDidMount={(element) => {
-              const foo = getPosition(element.getBoundingClientRect());
+              const position = getPosition(element.getBoundingClientRect());
               (element as HTMLElement).style.visibility = "visible";
               (element as HTMLElement).style[
-                foo.xDirection
-              ] = `${foo.xValue}px`;
+                position.xDirection
+              ] = `${position.xValue}px`;
               (element as HTMLElement).style[
-                foo.yDirection
-              ] = `${foo.yValue}px`;
-              if (foo.xCenter === true) {
-                ((element as HTMLElement)
-                  .children[0] as HTMLElement).classList.add(styles.xCenter);
+                position.yDirection
+              ] = `${position.yValue}px`;
+              if (position.xCenter === true) {
+                (element as HTMLElement).classList.add(styles.xCenter);
               }
-              if (foo.yCenter === true) {
-                ((element as HTMLElement)
-                  .children[0] as HTMLElement).classList.add(styles.yCenter);
+              if (position.yCenter === true) {
+                (element as HTMLElement).classList.add(styles.yCenter);
               }
             }}
           >
