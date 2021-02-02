@@ -277,8 +277,9 @@ export default component("App", () => {
                                                   minDate
                                                 ),
                                                 y: purchase.accBuyIn,
-                                                tootlip: `${base()?.number(
-                                                  purchase.accBuyIn
+                                                tootlip: `${base()?.buyinInformation(
+                                                  purchase.accBuyIn,
+                                                  purchase.buyDate
                                                 )}`,
                                               })
                                             ),
@@ -293,8 +294,9 @@ export default component("App", () => {
                                                   minDate
                                                 ),
                                                 y: purchase.accValue,
-                                                tootlip: `${base()?.number(
-                                                  purchase.accValue
+                                                tootlip: `${base()?.valueInformation(
+                                                  purchase.accValue,
+                                                  purchase.buyDate
                                                 )}`,
                                               })
                                             ),
@@ -303,7 +305,7 @@ export default component("App", () => {
                                         maxXValue={dateDiff}
                                         maxYValue={maxYValue}
                                         getYLabel={(y) =>
-                                          `${base()?.number(y)}€`
+                                          `${base()?.currency(y)}`
                                         }
                                         getXLabel={(x) =>
                                           base()?.date(
@@ -325,17 +327,20 @@ export default component("App", () => {
                                                 {
                                                   color: "blue",
                                                   values: accumulatedValues.map(
-                                                    (purchase) => ({
-                                                      x: getTimeDiff(
-                                                        purchase.buyDate,
-                                                        minDate
-                                                      ),
+                                                    (purchase) => {
+                                                      return {
+                                                        x: getTimeDiff(
+                                                          purchase.buyDate,
+                                                          minDate
+                                                        ),
 
-                                                      y: purchase.accBuyIn,
-                                                      tootlip: `${base()?.number(
-                                                        purchase.accBuyIn
-                                                      )}`,
-                                                    })
+                                                        y: purchase.accBuyIn,
+                                                        tootlip: `${base()?.buyinInformation(
+                                                          purchase.accBuyIn,
+                                                          purchase.buyDate
+                                                        )}`,
+                                                      };
+                                                    }
                                                   ),
                                                 },
 
@@ -349,8 +354,9 @@ export default component("App", () => {
                                                       ),
 
                                                       y: purchase.accValue,
-                                                      tootlip: `${base()?.number(
-                                                        purchase.accValue
+                                                      tootlip: `${base()?.valueInformation(
+                                                        purchase.accValue,
+                                                        purchase.buyDate
                                                       )}`,
                                                     })
                                                   ),
@@ -359,7 +365,7 @@ export default component("App", () => {
                                               maxYValue={maxYValue}
                                               maxXValue={dateDiff}
                                               getYLabel={(y) =>
-                                                `${base()?.number(y)}€`
+                                                `${base()?.currency(y)}`
                                               }
                                               getXLabel={(x) =>
                                                 base()?.date(
