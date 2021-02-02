@@ -168,7 +168,7 @@ function getLocationHash() {
 }
 
 const GRAPH_Y_TARGET_ROWS = 10;
-const GRAPH_X_TARGET_ROWS = 20;
+const GRAPH_X_COLUMNS = 20;
 const HEADLINE_HEIGHT = 18;
 
 export default component("App", () => {
@@ -311,7 +311,7 @@ export default component("App", () => {
                                           ) ?? ""
                                         }
                                         yTargetRows={GRAPH_Y_TARGET_ROWS}
-                                        xColumns={GRAPH_X_TARGET_ROWS}
+                                        xColumns={GRAPH_X_COLUMNS}
                                       />
 
                                       {accumulatedValuesList.map(
@@ -369,7 +369,7 @@ export default component("App", () => {
                                                 ) ?? ""
                                               }
                                               yTargetRows={GRAPH_Y_TARGET_ROWS}
-                                              xColumns={GRAPH_X_TARGET_ROWS}
+                                              xColumns={GRAPH_X_COLUMNS}
                                             />
                                           </>
                                         )
