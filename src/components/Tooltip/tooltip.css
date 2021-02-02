@@ -14,11 +14,10 @@
 
 .content {
   position: relative;
-  padding: var(--spacing_extraSmall);
-  background-color: var(--color_pallette_bottom_extraLowContrast);
-  color: var(--color_pallette_top_extraHighContrast);
-  font-size: var(--font_size_extraSmall);
+  padding: 0.25rem;
+  background-color: darkgray;
+  color: white;
+  font-size: 0.75rem;
   white-space: pre-wrap;
   border-radius: 2px;
-  box-shadow: var(--box_shadow_small);
 }
