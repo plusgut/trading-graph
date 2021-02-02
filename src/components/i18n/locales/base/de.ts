@@ -1,5 +1,5 @@
 import type base from "./en";
-const euroCurrencyFormatter = new Intl.NumberFormat("de-DE", {
+const euroCurrencyFormatter = new Intl.NumberFormat("de", {
   style: "currency",
   currency: "EUR",
 });
