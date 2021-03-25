@@ -1,5 +1,4 @@
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { TsConfigPathsPlugin } = require("awesome-typescript-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -13,6 +12,7 @@ module.exports = (env, argv) => ({
     filename: "js/[name].[hash].js",
     chunkFilename: "js/[name].[hash].bundle.js",
     publicPath: "/",
+    clean: true,
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
@@ -65,9 +65,6 @@ module.exports = (env, argv) => ({
     },
   },
   plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist")],
-    }),
     new HtmlWebpackPlugin({
       title: "Stock development",
       inject: "head",
