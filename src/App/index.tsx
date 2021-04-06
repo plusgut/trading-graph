@@ -169,7 +169,7 @@ function getLocationHash() {
 
 const GRAPH_Y_TARGET_ROWS = 10;
 const GRAPH_X_COLUMNS = 20;
-const HEADLINE_HEIGHT = 18;
+const HEADLINE_HEIGHT = 22;
 
 export default component("App", () => {
   const hash = store(getLocationHash());
@@ -259,8 +259,7 @@ export default component("App", () => {
                                   const graphCount =
                                     accumulatedValuesList.length + 1;
                                   const graphHeight =
-                                    windowHeight / graphCount -
-                                    graphCount * HEADLINE_HEIGHT;
+                                    windowHeight / graphCount - HEADLINE_HEIGHT;
                                   return (
                                     <>
                                       <div>sum:</div>

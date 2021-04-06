@@ -18,7 +18,7 @@ export default class Size extends Component<props> {
       if (entries.length === 1) {
         size.dispatch({
           width: entries[0].contentRect.width,
-          height: entries[0].contentRect.width,
+          height: entries[0].contentRect.height,
         });
       }
     });
